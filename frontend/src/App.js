@@ -45,7 +45,11 @@ function App() {
     const handleSubmit = (event) => {
         axios.post("http://localhost:9000/index.php", JSON.stringify({
             username: username,
-            password: password
+            password: password,
+            fullName: fullName,
+            phone: phone,
+            city: city,
+            acode: acode
         }))
         .then((response) => {
             console.log(response.data);
