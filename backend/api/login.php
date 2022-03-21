@@ -7,7 +7,7 @@
         $username = $content["username"];
         $password = $content["password"];
 
-        $query = "SELECT * FROM users WHERE username='$username' AND pw='$password'";
+        $query = "SELECT * FROM Users WHERE username='$username' AND pw='$password'";
 
         // echo $query;
 

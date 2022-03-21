@@ -6,9 +6,11 @@
         $response = array("success" => true, "message" => $content);
         // echo $content["username"];
         // echo $content["password"];
-        $query="insert into users values('".$content["username"]."', '".$content["password"]."', '".$content["phone"]."', '".$content["city"]."', '".$content["acode"]."', '".$content["fullName"]."')";
+        $query="INSERT INTO Users VALUES('".$content["username"]."', '".$content["password"]."', '".$content["phone"]."', '".$content["acode"]."', '".$content["fullName"]."')";
         // echo $query;
         mysqli_query($conn, $query);
         echo json_encode($response);
     }
 ?>
+
+<!-- INSERT INTO Users VALUES('zoom_official', 'zoom123', '4166048976', '416', 'Zoom'); -->
