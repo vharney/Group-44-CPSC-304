@@ -8,7 +8,7 @@ function Register() {
     const [password, setPassword] = useState("");
     const [fullName, setFullName] = useState("");
     const [phone, setPhone] = useState("");
-    const [city, setCity] = useState("");
+    // const [city, setCity] = useState("");
     const [acode, setAcode] = useState("");
 
     // Username input handler
@@ -31,10 +31,10 @@ function Register() {
         setPhone(event.target.value);
     };
 
-    // City input handler
-    const handleCity = (event) => {
-        setCity(event.target.value);
-    };
+    // // City input handler
+    // const handleCity = (event) => {
+    //     setCity(event.target.value);
+    // };
 
     // Area code input handler
     const handleAcode = (event) => {
@@ -43,12 +43,12 @@ function Register() {
 
     // Area code input handler
     const handleSubmit = (event) => {
-        axios.post("http://localhost:9000/index.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/register.php", JSON.stringify({
             username: username,
             password: password,
             fullName: fullName,
             phone: phone,
-            city: city,
+            // city: city,
             acode: acode
         }))
         .then((response) => {
@@ -56,8 +56,8 @@ function Register() {
           }, (error) => {
             console.log(error);
           });
-        console.log(username);
-        console.log(password);
+        // console.log(username);
+        // console.log(password);
     };
 
     return (
@@ -82,9 +82,9 @@ function Register() {
                     <div>
                         <TextField id="outlined-basic" label="Phone" variant="outlined" sx={{ mt: 2 }} onChange={handlePhone} />
                     </div>
-                    <div>
+                    {/* <div>
                         <TextField id="outlined-basic" label="City" variant="outlined" sx={{ mt: 2 }} onChange={handleCity} />
-                    </div>
+                    </div> */}
                     <div>
                         <TextField id="outlined-basic" label="Area Code" variant="outlined" sx={{ mt: 2 }} onChange={handleAcode} />
                     </div>
