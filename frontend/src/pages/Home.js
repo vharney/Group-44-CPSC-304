@@ -17,14 +17,15 @@ import AddIcon from '@material-ui/icons/Add';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { ListItemIcon, PersonAdd } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import axios from 'axios';
+import fs from "fs";
 import './Home.css';
 import Logo from "../assets/hireme.png";
-import avatar from "../assets/avatar.jpg";
 import placeholder from "../assets/img_placeholder.jpg";
 
 // AppBar Component
@@ -35,7 +36,7 @@ function NavBar({fullName}) {
     const { username } = useParams();
     const [anchorElUser, setAnchorElUser] = useState(null);
     const url = "/" + {username}.username + "/home"
-    console.log(url)
+    const avatar = require("../assets/" + {username}.username + ".jpg");
     
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
@@ -48,6 +49,16 @@ function NavBar({fullName}) {
     const [tabValue, setValue] = useState();
 
     const handleTabChange = (event, newValue) => {
+        console.log(event.target.innerText);
+        if (event.target.innerText === "CONNECTIONS") {
+            window.location = "/" + {username}.username + "/connections";
+        }
+        else if (event.target.innerText === "GROUPS") {
+            window.location = "/" + {username}.username + "/groups";
+        }
+        else if (event.target.innerText === "JOBS") {
+            window.location = "/" + {username}.username + "/jobs";
+        }
         setValue(newValue);
     }
 
@@ -60,7 +71,7 @@ function NavBar({fullName}) {
                 <Tabs value={tabValue} onChange={handleTabChange}>
                     {pages.map((page) => (
                         // Iterate pages to create pages tabs in AppBar
-                        <Tab label={page} style={{color: "white"}} />
+                        <Tab key={page} label={page} style={{color: "white"}} />
                     ))}
                 </Tabs>
                 
@@ -84,7 +95,7 @@ function NavBar({fullName}) {
                         keepMounted open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}
                     >
                         <MenuItem> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
-                        <MenuItem> <AccountCircleIcon fontSize="35px"/> &nbsp;  My account </MenuItem>
+                        <MenuItem onClick={() => {window.location = "/" + {username}.username + "/settings"}}> <ManageAccountsIcon fontSize="35px"/> &nbsp;  Account Settings </MenuItem>
                         <Divider />
                         <MenuItem> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>
                     </Menu>
@@ -97,6 +108,7 @@ function NavBar({fullName}) {
 // Component to create post
 function CreatePost({fullName}) {
     const { username } = useParams();
+    const avatar = require("../assets/" + {username}.username + ".jpg");
 
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 10, width: 500, height: 140}}} >
@@ -177,18 +189,20 @@ function Posts() {
                     Employee Only
                 </MenuItem>
             </Menu> */}
-            {posts.map((post) => (
+            {posts.map((post) => {
                 // Iterate pages to create pages tabs in AppBar
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
+                let post_avatar = "";
+                try {post_avatar = require("../assets/" + post[0].username + ".jpg")} catch {post_avatar = "not found"};
+                return <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
                     <Card variant="outlined" sx={{ maxWidth: 500 }} style={{borderRadius: "20px"}}>
                         <CardHeader
-                            avatar={<Avatar alt={post[0].fullname}  src="ads" />}
+                            avatar={<Avatar alt={post[0].fullname}  src={post_avatar} />}
                             title={post[0].fullname}
                             subheader={post[0].title}
                         />
                         <CardMedia
                             component="img"
-                            height="194"
+                            height="350"
                             image={placeholder}
                             alt="Post Media"
                         />
@@ -203,7 +217,7 @@ function Posts() {
                         <Avatar alt={post[0].fullname} style={{position: "absolute", height: "60px", width: "60px"}} sx={{m: 2}} src="ads" />
                     </Paper> */}
                 </Box>
-            ))}
+            })}
         </div>
     );
 }

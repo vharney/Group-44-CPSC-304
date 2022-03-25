@@ -9,7 +9,7 @@
 
         // $post = $content["query"];
 
-        $query="SELECT fullname, title, text_content FROM Posts_Create, Users WHERE Posts_Create.username=Users.username ";
+        $query="SELECT Users.username, fullname, title, text_content FROM Posts_Create, Users WHERE Posts_Create.username=Users.username ";
 
         # Using $conn from index.php 
         $result = mysqli_query($conn, $query);
