@@ -13,6 +13,8 @@ import LoginFailed from './pages/LoginFailed';
 import Home from './pages/Home';
 import Connections from './pages/Connections';
 import Account from './pages/Account';
+import UpdateSuccess from './pages/UpdateSuccess';
+import UpdateFailed from './pages/UpdateFailed';
 
 function App() {
     return(
@@ -24,6 +26,8 @@ function App() {
                 <Route path="/:username/home" component={Home} />
                 <Route path="/:username/connections" component={Connections} />
                 <Route path="/:username/settings" component={Account} />
+                <Route path="/updateSuccess" component={UpdateSuccess} />
+                <Route path="/:username/updateFailed" component={UpdateFailed} />
             </Switch>
         </Router>
     );

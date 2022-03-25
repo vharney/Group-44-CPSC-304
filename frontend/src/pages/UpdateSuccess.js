@@ -1,6 +1,6 @@
 import React from 'react';
 
-function LoginFailed() {
+function UpdateSuccess() {
     // Set timer to show fail status for 2 seconds
     setTimeout( function() {
         window.location.href = "/";
@@ -8,13 +8,13 @@ function LoginFailed() {
 
     return(
         <div style={{margin: 30}}>
-            <h2>Sign in failed</h2>
+            <h2>Update successful</h2>
             <div>
-            Username or Password doesn't exist in the database.
+            Your record has been successfully updated
             </div>
-            Redirecting back ...
+            Redirecting back to login page ...
         </div>
     );
 }
 
-export default LoginFailed;
+export default UpdateSuccess;

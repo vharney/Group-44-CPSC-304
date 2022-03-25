@@ -82,7 +82,7 @@ CREATE TABLE Employees_Hire (
 	position varchar(100),
 	UNIQUE(employeeID),
 	PRIMARY KEY(username),
-	FOREIGN KEY(username) REFERENCES Users(username) ON DELETE CASCADE,
+	FOREIGN KEY(username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY(username_comp) REFERENCES Companies(username) ON DELETE SET NULL,
 	FOREIGN KEY(profession) REFERENCES Industry_Professions(profession) ON DELETE SET NULL ON UPDATE CASCADE
 );

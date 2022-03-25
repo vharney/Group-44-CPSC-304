@@ -1,109 +1,93 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 import { Paper, Divider, Chip, Card, CardContent, CardHeader, CardMedia, Tabs, Tab, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 import AddIcon from '@material-ui/icons/Add';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { ListItemIcon, PersonAdd } from '@mui/material';
 import { useParams } from 'react-router-dom';
-
 import axios from 'axios';
-import fs from "fs";
 import './Home.css';
-import Logo from "../assets/hireme.png";
 import placeholder from "../assets/img_placeholder.jpg";
+import NavBar from './components/NavBar';
 
-// AppBar Component
-const pages = ["Connections", "Groups", "Jobs"]; 
-const settings = ['Profile', 'Account Detail', 'Logout'];
-
-function NavBar({fullName}) {
-    const { username } = useParams();
-    const [anchorElUser, setAnchorElUser] = useState(null);
-    const url = "/" + {username}.username + "/home"
-    const avatar = require("../assets/" + {username}.username + ".jpg");
+// function NavBar({fullName}) {
+//     const { username } = useParams();
+//     const [anchorElUser, setAnchorElUser] = useState(null);
+//     const url = "/" + {username}.username + "/home"
+//     const avatar = require("../assets/" + {username}.username + ".jpg");
     
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
+//     // AppBar Component
+//     const pages = ["Connections", "Groups", "Jobs"]; 
     
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+//     const handleOpenUserMenu = (event) => {
+//         setAnchorElUser(event.currentTarget);
+//     };
+    
+//     const handleCloseUserMenu = () => {
+//         setAnchorElUser(null);
+//     };
 
-    const [tabValue, setValue] = useState();
+//     const [tabValue, setValue] = useState();
 
-    const handleTabChange = (event, newValue) => {
-        console.log(event.target.innerText);
-        if (event.target.innerText === "CONNECTIONS") {
-            window.location = "/" + {username}.username + "/connections";
-        }
-        else if (event.target.innerText === "GROUPS") {
-            window.location = "/" + {username}.username + "/groups";
-        }
-        else if (event.target.innerText === "JOBS") {
-            window.location = "/" + {username}.username + "/jobs";
-        }
-        setValue(newValue);
-    }
+//     const handleTabChange = (event, newValue) => {
+//         console.log(event.target.innerText);
+//         if (event.target.innerText === "CONNECTIONS") {
+//             window.location = "/" + {username}.username + "/connections";
+//         }
+//         else if (event.target.innerText === "GROUPS") {
+//             window.location = "/" + {username}.username + "/groups";
+//         }
+//         else if (event.target.innerText === "JOBS") {
+//             window.location = "/" + {username}.username + "/jobs";
+//         }
+//         setValue(newValue);
+//     }
 
-    return(
-        // Now implement logged in username and its content
-        // 2 ways: 1. get from URL address bar (shortcut but unrealistic) 2. Use session but harder to implement
-        <AppBar position='fixed' style={{ background: '#2E3B55'}}>
-            <Toolbar sx={{justifyContent: "space-between"}}>
-                <a href={url}> <img style={{height: "60px"}} src={Logo} alt="Logo" /> </a>
-                <Tabs value={tabValue} onChange={handleTabChange}>
-                    {pages.map((page) => (
-                        // Iterate pages to create pages tabs in AppBar
-                        <Tab key={page} label={page} style={{color: "white"}} />
-                    ))}
-                </Tabs>
+//     return(
+//         // Now implement logged in username and its content
+//         // 2 ways: 1. get from URL address bar (shortcut but unrealistic) 2. Use session but harder to implement
+//         <AppBar position='fixed' style={{ background: '#2E3B55'}}>
+//             <Toolbar sx={{justifyContent: "space-between"}}>
+//                 <a href={url}> <img style={{height: "60px"}} src={Logo} alt="Logo" /> </a>
+//                 <Tabs value={tabValue} onChange={handleTabChange}>
+//                     {pages.map((page) => (
+//                         // Iterate pages to create pages tabs in AppBar
+//                         <Tab key={page} label={page} style={{color: "white"}} />
+//                     ))}
+//                 </Tabs>
                 
 
-                <Box position="relative" sx={{ flexGrow: 0 }}>
-                    <Tooltip title="Open settings">
-                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                            <Avatar position="absolute" sx={{end: 0}} alt={fullName} src={avatar} />
-                            <ArrowDropDownIcon style={{color: "white"}}/>
-                        </IconButton>
-                    </Tooltip>
-                    <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                          }}
-                        keepMounted open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}
-                    >
-                        <MenuItem> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
-                        <MenuItem onClick={() => {window.location = "/" + {username}.username + "/settings"}}> <ManageAccountsIcon fontSize="35px"/> &nbsp;  Account Settings </MenuItem>
-                        <Divider />
-                        <MenuItem> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>
-                    </Menu>
-                </Box>
-            </Toolbar>
-        </AppBar>
-    );
-}
+//                 <Box position="relative" sx={{ flexGrow: 0 }}>
+//                     <Tooltip title="Open settings">
+//                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+//                             <Avatar position="absolute" sx={{end: 0}} alt={fullName} src={avatar} />
+//                             <ArrowDropDownIcon style={{color: "white"}}/>
+//                         </IconButton>
+//                     </Tooltip>
+//                     <Menu sx={{ mt: '45px' }} id="menu-appbar" anchorEl={anchorElUser}
+//                         anchorOrigin={{
+//                             vertical: 'top',
+//                             horizontal: 'right',
+//                         }}
+//                         transformOrigin={{
+//                             vertical: 'top',
+//                             horizontal: 'right',
+//                           }}
+//                         keepMounted open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}
+//                     >
+//                         <MenuItem> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
+//                         <MenuItem onClick={() => {window.location = "/" + {username}.username + "/settings"}}> <ManageAccountsIcon fontSize="35px"/> &nbsp;  Account Settings </MenuItem>
+//                         <Divider />
+//                         <MenuItem> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>
+//                     </Menu>
+//                 </Box>
+//             </Toolbar>
+//         </AppBar>
+//     );
+// }
 
 // Component to create post
 function CreatePost({fullName}) {
