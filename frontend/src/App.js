@@ -15,6 +15,8 @@ import Connections from './pages/Connections';
 import Account from './pages/Account';
 import UpdateSuccess from './pages/UpdateSuccess';
 import UpdateFailed from './pages/UpdateFailed';
+import RegisterSuccess from './pages/RegisterSuccess';
+import RegisterFailed from './pages/RegisterFailed';
 
 function App() {
     return(
@@ -28,6 +30,8 @@ function App() {
                 <Route path="/:username/settings" component={Account} />
                 <Route path="/updateSuccess" component={UpdateSuccess} />
                 <Route path="/:username/updateFailed" component={UpdateFailed} />
+                <Route path="/registerSuccess" component={RegisterSuccess} />
+                <Route path="/registerFailed" component={RegisterFailed} />
             </Switch>
         </Router>
     );

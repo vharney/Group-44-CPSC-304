@@ -7,7 +7,8 @@ import NavBar from './components/NavBar';
 
 function Account() {
     const { username } = useParams();
-    const avatar = require("../assets/" + {username}.username + ".jpg");
+    let avatar = "";
+    try {avatar = require("../assets/" + {username}.username + ".jpg")} catch {avatar = "not found"};
     const [userType, setUserType] = useState("");
 
     const [usernameDB, setUsername] = useState("");

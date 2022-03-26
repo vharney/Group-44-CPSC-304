@@ -99,7 +99,8 @@ import NavBar from './components/NavBar';
 // Component to create post
 function CreatePost({fullName}) {
     const { username } = useParams();
-    const avatar = require("../assets/" + {username}.username + ".jpg");
+    let avatar = "";
+    try {avatar = require("../assets/" + {username}.username + ".jpg")} catch {avatar = "not found"};
 
     const [newPost, openNewPost] = useState(false);
 
@@ -203,7 +204,7 @@ function CreatePost({fullName}) {
                             Your Posts
                         </Typography>
                         <Box style={{overflow: "scroll", maxHeight: 600}} sx={{mt: 2}}>
-                            {yourPosts.map((post) => {
+                            {yourPosts.length > 0 ? yourPosts.map((post) => {
                                 // Iterate pages to create pages tabs in AppBar
                                 let post_avatar = "";
                                 try {post_avatar = require("../assets/" + post[0].username + ".jpg")} catch {post_avatar = "not found"};
@@ -228,7 +229,7 @@ function CreatePost({fullName}) {
                                         </CardContent>
                                     </Card>
                                 </Box>
-                            })}`
+                            }) : <div> You have never posted </div>}
                         </Box>
                     </Box>
                 </Modal>

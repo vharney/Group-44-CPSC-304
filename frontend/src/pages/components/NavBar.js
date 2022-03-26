@@ -19,8 +19,10 @@ import axios from 'axios';
 function NavBar({fullName}) {
     const { username } = useParams();
     const [anchorElUser, setAnchorElUser] = useState(null);
+    let avatar = "";
+    try {avatar = require("../assets/" + {username}.username + ".jpg")} catch {avatar = "not found"};
     const url = "/" + {username}.username + "/home"
-    const avatar = require("../../assets/" + {username}.username + ".jpg");
+   
     // AppBar Component
     let pages = ["Connections", "Groups", "Jobs"]
     const [userType, setUserType] = useState("");
