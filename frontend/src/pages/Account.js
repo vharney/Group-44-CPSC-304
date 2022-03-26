@@ -49,6 +49,7 @@ function Account() {
     }
 
     useEffect(() => {
+        let type = "";
         axios.post("http://localhost:9000/api/userType.php", JSON.stringify({
             username: {username}.username,
         }))
@@ -59,12 +60,13 @@ function Account() {
             }
             else {
                 // Else display home page accordingly
+                type = response.data.message;
                 setUserType(response.data.message);
             }
         }, (error) => {
             console.log(error);
         }).then(() => {
-            if (userType === "COMPANIES") {
+            if (type === "COMPANIES") {
                 axios.post("http://localhost:9000/api/getCompanyInfo.php", JSON.stringify({
                     username: {username}.username,
                 }))

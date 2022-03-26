@@ -4,9 +4,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import { Paper, Divider, Chip, Card, CardContent, CardHeader, CardMedia, Tabs, Tab, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+import { Paper, IconButton, Select, MenuItem, Modal, Divider, Chip, Card, CardContent, CardHeader, CardMedia, InputLabel, Checkbox, FormGroup, FormControlLabel, TextField } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DialogTitle from '@mui/material/DialogTitle';
 import AddIcon from '@material-ui/icons/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Home.css';
@@ -94,15 +101,162 @@ function CreatePost({fullName}) {
     const { username } = useParams();
     const avatar = require("../assets/" + {username}.username + ".jpg");
 
+    const [newPost, openNewPost] = useState(false);
+
+    const handleOpen = () => {
+        openNewPost(true);
+    }
+
+    const handleClose = () => {
+        openNewPost(false);
+    }
+
+    const [textContent, setTextContent] = useState("Input Text Content Here");
+
+    const handleTextChange = (event) => {
+        setTextContent(event.target.value);
+    }
+
+    const [title, setTitle] = useState("");
+
+    const handleTitleChange = (event) => {
+        setTitle(event.target.value);
+    }
+
+    const [postType, setPostType] = useState("");
+
+    const handleTypeChange = (event) => {
+        setPostType(event.target.value);
+    }
+
+    const handleCreatePost = () => {
+        axios.post("http://localhost:9000/api/createPost.php", JSON.stringify({
+            username: {username}.username,
+            title: title,
+            textContent: textContent,
+            postType: postType,
+        }))
+        .then((response) => {
+            window.location.reload(false);
+          }, (error) => {
+            console.log(error);
+          });
+    }
+
+    const [openViewPost, setViewPost] = useState(false);
+    const [yourPosts, setYourPosts] = useState([]);
+
+    const handleOpenViewPost = () => {
+        setViewPost(true);
+        axios.post("http://localhost:9000/api/getYourPosts.php", JSON.stringify({
+            username: {username}.username
+        }))
+        .then((response) => {
+            if (response.data.message === "error") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                setYourPosts(response.data.message);
+            }
+        }, (error) => {
+            console.log(error);
+        });
+        // Logic to load post and allow deletion here
+    }
+
+    const handleCloseViewPost = () => {
+        setViewPost(false);
+    }
+
+    const handleDeletePost = (event) => {
+        console.log(event.target.id);
+        axios.post("http://localhost:9000/api/deletePost.php", JSON.stringify({
+            postID: event.target.id
+        }))
+        .then((response) => {
+            if (response.data.message === "delete success") {
+                // If delete is successful, reload to home page
+                window.location.reload(false);
+            }
+            else {
+                // Else log error in console
+                console.log(response.data.message);
+
+            }
+        }, (error) => {
+            console.log(error);
+        });
+        
+    }
+
     return (
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 10, width: 500, height: 140}}} >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 10, width: 500, height: 170}}} >
             <Paper variant="outlined" elevation={0} style={{position: "relative", borderRadius: "20px"}}>
                 <h2 style={{marginLeft: "20px"}} > Hi, {fullName} </h2>
-                <Avatar style={{position: "absolute", height: "60px", width: "60px"}} sx={{m: 2, mt: 0}} alt={fullName} src={avatar} />
-                <Button style={{position: "absolute", borderRadius: "20px", width: "360px"}} sx={{ml: 13, mt: 2}} variant="outlined" >    
+                <Avatar style={{position: "absolute", height: "80px", width: "80px"}} sx={{m: 2, mt: 0}} alt={fullName} src={avatar} />
+                <Button color="secondary" sx={{ml: 14, mt: 0}} style={{position: "absolute"}} onClick={handleOpenViewPost}> <AccessTimeIcon /> &nbsp; View or Delete Your Previous Posts</Button>
+                <Modal open={openViewPost} onClose={handleCloseViewPost}>
+                    <Box style = {{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 700,  backgroundColor: 'white', boxShadow: 24, padding: 12, borderRadius: "5px"}}>
+                        <Typography  variant="h5" component="h2">
+                            Your Posts
+                        </Typography>
+                        <Box style={{overflow: "scroll", maxHeight: 600}} sx={{mt: 2}}>
+                            {yourPosts.map((post) => {
+                                // Iterate pages to create pages tabs in AppBar
+                                let post_avatar = "";
+                                try {post_avatar = require("../assets/" + post[0].username + ".jpg")} catch {post_avatar = "not found"};
+                                return <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
+                                    <Card variant="outlined" sx={{ maxWidth: 500 }} style={{borderRadius: "20px", position: "relative"}} >
+                                        <CardHeader
+                                            avatar={<Avatar alt={post[0].fullname}  src={post_avatar} />}
+                                            title={post[0].fullname}
+                                            subheader={post[0].title}
+                                        />
+                                        <Button style={{position: "absolute", right: 10, top: 12}} color="error" onClick={handleDeletePost} id={post[0].postID} > <DeleteIcon id={post[0].postID}style={{fontSize: 30}} />  Delete Post </Button>
+                                        <CardMedia
+                                            component="img"
+                                            height="350"
+                                            image={placeholder}
+                                            alt="Post Media"
+                                        />
+                                        <CardContent>
+                                            <Typography variant="body2">
+                                                {post[0].text_content}
+                                            </Typography>
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            })}`
+                        </Box>
+                    </Box>
+                </Modal>
+                
+                <Button style={{position: "absolute", borderRadius: "20px", width: "360px"}} sx={{ml: 14, mt: 6}} onClick={handleOpen} variant="outlined" >    
                     <AddIcon />
                     &nbsp; share a new post
                 </Button>
+                <Dialog open={newPost} onClose={handleClose}>
+                    <DialogTitle>Create a New Post</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText> Share your thoughts in the text field below, dont forget to choose the type of your posts and title your post </DialogContentText>
+                        <TextField id="outlined-basic" fullWidth label="Title" variant="outlined" onChange={handleTitleChange} sx={{mt: 2, mb: 2}} />
+                        <TextField fullWidth label="Text Content" multiline rows={7} onChange={handleTextChange} variant="filled" />
+                    </DialogContent>
+                    <InputLabel sx={{ml: 10, mr: 10}} id="demo-simple-select-label">Post Type</InputLabel>
+                    <Select value={postType} sx={{ml: 10, mr: 10, mb: 5}} label="Type" onChange={handleTypeChange} >
+                        <MenuItem value={"announcement"}>Announcement</MenuItem>
+                        <MenuItem value={"article"}>Article</MenuItem>
+                        <MenuItem value={"hiring"}>Hiring</MenuItem>
+                        <MenuItem value={"news"}>News</MenuItem>
+                        <MenuItem value={"post"}>Post</MenuItem>
+                    </Select>
+                    <DialogActions>
+                        <Button color="error" onClick={handleClose}>Cancel</Button>
+                        <Button color="success" onClick={handleCreatePost}>Submit</Button>
+                    </DialogActions>    
+                </Dialog>
             </Paper>
         </Box>
     );
@@ -153,6 +307,7 @@ function Posts() {
             <FormGroup style={{position: "absolute", top: "20px",right: "30px"}}>
                 <FormControlLabel style={{display: "inline-block"}} control={<Checkbox defaultChecked />} label="Company" />
                 <FormControlLabel style={{display: "inline-block"}} control={<Checkbox defaultChecked />} label="Employee" />
+                <FormControlLabel style={{display: "inline-block"}} control={<Checkbox defaultChecked />} label="Hiring Type" />
             </FormGroup>
             {/* <Checkbox defaultChecked label="Company"> TEst </Checkbox>
             <Button variant="contained" disableElevation endIcon={<KeyboardArrowDownIcon />} onClick={handleOpenFilterMenu} style={{position: "absolute", top: "-15px",right: "30px"}}>

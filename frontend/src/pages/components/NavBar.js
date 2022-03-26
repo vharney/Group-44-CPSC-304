@@ -104,7 +104,7 @@ function NavBar({fullName}) {
                         <MenuItem> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
                         <MenuItem onClick={() => {window.location = "/" + {username}.username + "/settings"}}> <ManageAccountsIcon fontSize="35px"/> &nbsp;  Account Settings </MenuItem>
                         <Divider />
-                        <MenuItem> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>
+                        <MenuItem onClick={() => {window.location = "/"}}> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>
                     </Menu>
                 </Box>
             </Toolbar>
