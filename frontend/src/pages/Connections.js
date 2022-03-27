@@ -1,9 +1,12 @@
 import React from 'react';
 import NavBar from './components/NavBar';
 import { useState } from 'react';
-import { Box, Paper, Chip, InputBase, IconButton, Divider, Card, CardHeader, CardContent, Typography, Avatar } from '@mui/material';
+import { Box, Paper, Chip, InputBase, BottomNavigation, BottomNavigationAction, IconButton, Divider, Card, CardHeader, CardContent, Typography, Avatar } from '@mui/material';
 import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 function SearchConnections() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -84,10 +87,23 @@ function SearchConnections() {
 }
 
 function Connections() {
+    const [botNav, setBotNav] = useState();
+
     return (
         <div>
             <NavBar />
             <SearchConnections />
+            <BottomNavigation
+                showLabels
+                value={botNav}
+                onChange={(event, newValue) => {
+                    setBotNav(newValue);
+                }}
+                >
+                <BottomNavigationAction label="My Connections" icon={<GroupsIcon />} />
+                <BottomNavigationAction label="Waiting Approval" icon={<AccessTimeIcon />} />
+                <BottomNavigationAction label="Approve New Conection" icon={<PendingActionsIcon />} />
+            </BottomNavigation>
         </div>
     );
 }

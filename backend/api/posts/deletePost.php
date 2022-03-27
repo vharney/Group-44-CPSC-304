@@ -1,5 +1,5 @@
 <?php
-    include '../index.php'; // This include statement will allow us to use "$conn" from index.php which will be the connection to the MySQL DB
+    include '../../index.php'; // This include statement will allow us to use "$conn" from index.php which will be the connection to the MySQL DB
 
     error_reporting(E_ALL ^ E_WARNING); 
     if (!empty($_POST)) {
