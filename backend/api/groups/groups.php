@@ -7,9 +7,9 @@
 
         $username = $content["username"];
 
-        $query="SELECT J1.groupID, groupName, memberNum FROM User_Groups, Joins J1
+        $query="SELECT DISTINCT J1.groupID, groupName, memberNum FROM User_Groups, Joins J1
                 WHERE User_Groups.groupID=J1.groupID 
-                    AND NOT EXISTS (SELECT * FROM Joins J2 WHERE J2.groupID=J1.groupID AND (J1.username='$username' OR J2.username='$username'))";
+                    AND NOT EXISTS (SELECT * FROM Joins J2 WHERE J2.groupID=J1.groupID AND User_Groups.groupID=J2.groupID AND  J2.username='$username')";
 
         # Using $conn from index.php 
         $result = mysqli_query($conn, $query);
