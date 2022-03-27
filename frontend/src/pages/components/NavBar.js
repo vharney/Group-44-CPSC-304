@@ -28,6 +28,7 @@ function NavBar({fullName}) {
     const [userType, setUserType] = useState("");
 
     useEffect(() => {
+        console.log(window.location.href);
         axios.post("http://localhost:9000/api/userType.php", JSON.stringify({
             username: {username}.username,
         }))
@@ -53,7 +54,7 @@ function NavBar({fullName}) {
         setAnchorElUser(null);
     };
 
-    const [tabValue, setValue] = useState();
+    const [tabValue, setValue] = useState(window.location.href.slice(window.location.href.lastIndexOf("/") + 1));
 
     const handleTabChange = (event, newValue) => {
         console.log(event.target.innerText);

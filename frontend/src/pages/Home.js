@@ -333,7 +333,7 @@ function Posts() {
                 // Iterate pages to create pages tabs in AppBar
                 let post_avatar = "";
                 try {post_avatar = require("../assets/" + post[0].username + ".jpg")} catch {post_avatar = "not found"};
-                return <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
+                return <Box key={post[0].postID} sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
                     <Card variant="outlined" sx={{ maxWidth: 500 }} style={{borderRadius: "20px"}}>
                         <CardHeader
                             avatar={<Avatar alt={post[0].fullname}  src={post_avatar} />}
