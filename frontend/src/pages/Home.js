@@ -131,7 +131,7 @@ function CreatePost({fullName}) {
     }
 
     const handleCreatePost = () => {
-        axios.post("http://localhost:9000/api/createPost.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/posts/createPost.php", JSON.stringify({
             username: {username}.username,
             title: title,
             textContent: textContent,
@@ -149,7 +149,7 @@ function CreatePost({fullName}) {
 
     const handleOpenViewPost = () => {
         setViewPost(true);
-        axios.post("http://localhost:9000/api/getYourPosts.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/posts/getYourPosts.php", JSON.stringify({
             username: {username}.username
         }))
         .then((response) => {
@@ -173,7 +173,7 @@ function CreatePost({fullName}) {
 
     const handleDeletePost = (event) => {
         console.log(event.target.id);
-        axios.post("http://localhost:9000/api/deletePost.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/posts/deletePost.php", JSON.stringify({
             postID: event.target.id
         }))
         .then((response) => {
@@ -268,7 +268,7 @@ function Posts() {
 
     // Component did mount
     useEffect(() => {
-        axios.post("http://localhost:9000/api/posts.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/posts/posts.php", JSON.stringify({
             //NOTHING NOW CAN BE UPDATED TO FILTER 
         }))
         .then((response) => {

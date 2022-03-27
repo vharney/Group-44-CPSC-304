@@ -14,7 +14,7 @@ function SearchConnections() {
     }
 
     const handleSearch = () => {
-        axios.post("http://localhost:9000/api/searchConnections.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/connections/searchConnections.php", JSON.stringify({
             fnameuname: searchQuery
         }))
         .then((response) => {

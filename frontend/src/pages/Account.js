@@ -31,7 +31,7 @@ function Account() {
     };
 
     const handleUpdate = (event) => {
-        axios.post("http://localhost:9000/api/updateProfile.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/accounts/updateProfile.php", JSON.stringify({
             username: {username}.username,
             newUsername: usernameDB,
             password: password,
@@ -68,7 +68,7 @@ function Account() {
             console.log(error);
         }).then(() => {
             if (type === "COMPANIES") {
-                axios.post("http://localhost:9000/api/getCompanyInfo.php", JSON.stringify({
+                axios.post("http://localhost:9000/api/accounts/getCompanyInfo.php", JSON.stringify({
                     username: {username}.username,
                 }))
                 .then((response) => {
@@ -89,7 +89,7 @@ function Account() {
                 });
             }
             else {
-                axios.post("http://localhost:9000/api/getEmployeeInfo.php", JSON.stringify({
+                axios.post("http://localhost:9000/api/accounts/getEmployeeInfo.php", JSON.stringify({
                     username: {username}.username,
                 }))
                 .then((response) => {

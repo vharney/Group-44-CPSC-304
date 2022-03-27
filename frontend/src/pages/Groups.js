@@ -10,7 +10,7 @@ function AvailableGroups() {
     const [availableGroups, setAvailableGroups] = useState([]);
     // Component did mount
     useEffect(() => {
-        axios.post("http://localhost:9000/api/groups.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/groups/groups.php", JSON.stringify({
             username: {username}.username
         }))
         .then((response) => {
@@ -57,7 +57,7 @@ function YourGroups() {
     
     // Component did mount
     useEffect(() => {
-        axios.post("http://localhost:9000/api/getYourGroups.php", JSON.stringify({
+        axios.post("http://localhost:9000/api/groups/getYourGroups.php", JSON.stringify({
             username: {username}.username
         }))
         .then((response) => {
