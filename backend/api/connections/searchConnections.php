@@ -4,9 +4,12 @@
     if (!empty($_POST)) {
         $content = json_decode(array_keys($_POST)[0], true);
 
+        $username = $content["username"];
         $fnameuname = $content["fnameuname"];
 
-        $query="SELECT * FROM Users, Employees_Hire WHERE Users.username=Employees_Hire.username AND (Users.username LIKE '%$fnameuname%' OR Users.fullname LIKE '%$fnameuname%')";
+        $query="SELECT * FROM Users, Employees_Hire 
+                WHERE Users.username=Employees_Hire.username AND (Users.username LIKE '%$fnameuname%' OR Users.fullname LIKE '%$fnameuname%') AND Users.username!='$username'
+                    AND NOT EXISTS (SELECT * FROM Connections WHERE username_1='$username' AND username_2=Users.username)";
         // echo $query;
         # Using $conn from index.php 
         $result = mysqli_query($conn, $query);
