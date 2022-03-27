@@ -108,8 +108,8 @@ CREATE TABLE Jobs (
 	username varchar(100) NOT NULL,
 	title varchar(100),
 	salary int,
-	lcoation varchar(100),
-	PRIMARY KEY(username, title),
+	location varchar(100),
+	PRIMARY KEY(username, title, location),
 	FOREIGN KEY(username) REFERENCES Companies(username)
 );
 
