@@ -192,9 +192,10 @@ INSERT INTO Employees_Hire VALUES("will_iam", 28, NULL, ":/databaseCV/4", "Recru
 INSERT INTO Employees_Hire VALUES("geek42", 40, NULL, ":/databaseCV/5", "Software Engineer", "amazon_official", "Junior");
 
 INSERT INTO Connections VALUES("geek42", "janedoe", "approved");
+INSERT INTO Connections VALUES("janedoe", "geek42", "approved");
 INSERT INTO Connections VALUES("will_iam", "jack123", "pending");
-INSERT INTO Connections VALUES("johndoe", "geek42", "declined");
 INSERT INTO Connections VALUES("janedoe", "will_iam", "approved");
+INSERT INTO Connections VALUES("will_iam", "janedoe", "approved");
 INSERT INTO Connections VALUES("jack123", "geek42", "pending");
 
 INSERT INTO Joins VALUES(1, "johndoe");

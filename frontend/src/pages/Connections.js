@@ -8,9 +8,11 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import PendingActionsIcon from '@mui/icons-material/PendingActions';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
 import { useParams } from 'react-router-dom';
 
 function SearchConnections() {
+    const { username } = useParams();
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
 
@@ -20,6 +22,7 @@ function SearchConnections() {
 
     const handleSearch = () => {
         axios.post("http://localhost:9000/api/connections/searchConnections.php", JSON.stringify({
+            username: {username}.username,
             fnameuname: searchQuery
         }))
         .then((response) => {
@@ -32,6 +35,25 @@ function SearchConnections() {
                 // console.log(response);
                 setSearchResults(response.data.message);
 
+            }
+        }, (error) => {
+            console.log(error);
+        });
+    }
+    
+    const handleRequestConnection = (event) => {
+        axios.post("http://localhost:9000/api/connections/requestConnect.php", JSON.stringify({
+            username_1: {username}.username,
+            username_2: event.target.id
+        }))
+        .then((response) => {
+            if (response.data.message === "failed") {
+                // Log error if any
+                console.log(response);
+            }
+            else {
+                // Else reload page
+                window.location.reload(false);
             }
         }, (error) => {
             console.log(error);
@@ -56,6 +78,9 @@ function SearchConnections() {
                 <Divider sx={{m: 2}}>
                     <Chip label="Search Results" />
                 </Divider>
+                <div style={{textAlign: "center", width: "50%", margin: "0 auto", color: "grey"}}>
+                    Other employees that you have already connected with will not be displayed in the search result, check your "My Connections" page instead
+                </div>
                 {searchResults.map((searchResult) => {
                     let post_avatar = "";
                     try {post_avatar = require("../assets/" + searchResult[0].username + ".jpg")} catch {post_avatar = "not found"};
@@ -66,7 +91,7 @@ function SearchConnections() {
                                 title={searchResult[0].fullname}
                                 subheader={searchResult[0].username}
                             />
-                            <Box sx={{ml: 2, mb: 2}}>
+                            <Box sx={{ml: 2, mb: 2}} style={{position: "relative"}}>
                                 <Typography variant="body2">
                                     Profession: {searchResult[0].profession}  ({searchResult[0].position})
                                 </Typography>
@@ -76,6 +101,15 @@ function SearchConnections() {
                                 <Typography variant="body2">
                                     Phone: {searchResult[0].phone}
                                 </Typography>
+                                <div style={{position: "absolute", right:10, bottom: 0, textAlign: "center"}}>
+                                    <ConnectWithoutContactIcon />
+                                    <br></br>
+                                    <Button onClick={handleRequestConnection} id={searchResult[0].username} >
+                                        Request 
+                                        <br></br>
+                                        Connection
+                                    </Button>
+                                </div>
                             </Box>
                         </Card>
                     </Box>
@@ -170,8 +204,44 @@ function Connections() {
         });
     }
 
+    const handleApproveButton = (event) => {
+        // console.log(event.target.id)
+        axios.post("http://localhost:9000/api/connections/approveButton.php", JSON.stringify({
+            username_1: event.target.id,
+            username_2: {username}.username
+        }))
+        .then((response) => {
+            if (response.data.message === "failed") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                window.location.reload(false);
+            }
+        }, (error) => {
+            console.log(error);
+        });
+    };
 
-
+    const handleDeclineButton = (event) => {
+        axios.post("http://localhost:9000/api/connections/declineButton.php", JSON.stringify({
+            username_1: event.target.id,
+            username_2: {username}.username
+        }))
+        .then((response) => {
+            if (response.data.message === "failed") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                window.location.reload(false);
+            }
+        }, (error) => {
+            console.log(error);
+        });
+    }
 
     return (
         <div>
@@ -185,9 +255,9 @@ function Connections() {
                         setBotNav(newValue);
                     }}
                     >
-                    <BottomNavigationAction onClick={handleMyConnection} sx={{mr: 6}} style={{backgroundColor: "lightblue", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="My Connections" icon={<GroupsIcon />} />
-                    <BottomNavigationAction onClick={handleWaitingApproval} sx={{mr: 6}} style={{backgroundColor: "lightblue", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Waiting Approval" icon={<AccessTimeIcon />} />
-                    <BottomNavigationAction onClick={handleApproveNewConnections} style={{backgroundColor: "lightblue", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Approve New Conection" icon={<PendingActionsIcon />} />
+                    <BottomNavigationAction onClick={handleMyConnection} sx={{mr: 6}} style={{backgroundColor: "#282c34", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="My Connections" icon={<GroupsIcon />} />
+                    <BottomNavigationAction onClick={handleWaitingApproval} sx={{mr: 6}} style={{backgroundColor: "#282c34", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Waiting Approval" icon={<AccessTimeIcon />} />
+                    <BottomNavigationAction onClick={handleApproveNewConnections} style={{backgroundColor: "#282c34", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Approve New Conection" icon={<PendingActionsIcon />} />
                 </BottomNavigation>
             </Paper>
 
@@ -257,8 +327,10 @@ function Connections() {
                                                 Phone: {waitingApproval[0].phone}
                                             </Typography>
                                         </Box>
-                                        <div style={{position: "absolute", right: 20, bottom: 20}}> 
-                                            <AccessTimeFilledIcon style={{fontSize: "90px"}} />
+                                        <div style={{position: "absolute", right: 20, bottom: 20, textAlign: "center"}}> 
+                                            <AccessTimeFilledIcon style={{fontSize: "60px", color:"grey"}} />
+                                            <br></br>
+                                            Pending Approval
                                         </div>
                                     </Card>
                                 </Box>
@@ -299,9 +371,9 @@ function Connections() {
                                             </Typography>
                                         </Box>
                                         <div style={{position: "absolute", right: 20, bottom: 20}}> 
-                                            <Button style={{width: "100px"}} sx={{mb: 1}} elevation={0} variant="contained" color="success">Approve</Button>
+                                            <Button id={approveNewConnection[0].username} onClick={handleApproveButton} style={{width: "100px"}} sx={{mb: 1}} elevation={0} variant="contained" color="success">Approve</Button>
                                             <br></br>
-                                            <Button style={{width: "100px"}} elevation={0} variant="contained" color="error">Decline</Button>
+                                            <Button id={approveNewConnection[0].username} onClick={handleDeclineButton} style={{width: "100px"}} elevation={0} variant="contained" color="error">Decline</Button>
                                         </div>
                                     </Card>
                                 </Box>
