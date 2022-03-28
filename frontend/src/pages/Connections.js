@@ -247,8 +247,9 @@ function Connections() {
         <div>
             <NavBar />
             <SearchConnections />
-            <Paper sx={{ position: 'fixed', bottom: 40, left: 0, right: 0 }} elevation={0}>
+            <Box sx={{ position: 'fixed', bottom: 40, left: 0, right: 0 }} style={{background: "#E8E8E8"}} elevation={0}>
                 <BottomNavigation
+                    style={{background: "#E8E8E8"}}
                     showLabels
                     value={botNav}
                     onChange={(event, newValue) => {
@@ -259,7 +260,7 @@ function Connections() {
                     <BottomNavigationAction onClick={handleWaitingApproval} sx={{mr: 6}} style={{backgroundColor: "#282c34", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Waiting Approval" icon={<AccessTimeIcon />} />
                     <BottomNavigationAction onClick={handleApproveNewConnections} style={{backgroundColor: "#282c34", color: "white", borderRadius: "100px", height: "70px", width: "70px"}} label="Approve New Conection" icon={<PendingActionsIcon />} />
                 </BottomNavigation>
-            </Paper>
+            </Box>
 
             <Modal open={openMyConnection} onClose={handleCloseMyConnection}>
                 <Box style = {{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 700,  backgroundColor: 'white', boxShadow: 24, padding: 12, borderRadius: "5px"}}>
