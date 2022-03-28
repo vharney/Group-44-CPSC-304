@@ -17,7 +17,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './Home.css';
-import placeholder from "../assets/img_placeholder.jpg";
+// import placeholder from "../assets/img_placeholder.jpg";
 import NavBar from './components/NavBar';
 
 // function NavBar({fullName}) {
@@ -219,7 +219,7 @@ function CreatePost({fullName}) {
                                         <CardMedia
                                             component="img"
                                             height="350"
-                                            image={placeholder}
+                                            image={require("../assets/randomposts" + (Math.floor(Math.random() * 5) + 1) + ".jpg")}
                                             alt="Post Media"
                                         />
                                         <CardContent>
@@ -343,7 +343,7 @@ function Posts() {
                         <CardMedia
                             component="img"
                             height="350"
-                            image={placeholder}
+                            image={require("../assets/randomposts" + (Math.floor(Math.random() * 5) + 1) + ".jpg")}
                             alt="Post Media"
                         />
                         <CardContent>
