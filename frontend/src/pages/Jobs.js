@@ -2,7 +2,7 @@ import React from 'react';
 import NavBar from './components/NavBar';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Card, Chip, Paper, Button, CardHeader, DialogActions, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, InputLabel } from '@mui/material';
+import { Box, Typography, FormControl, Card, Select, MenuItem, Chip, Paper, Button, CardHeader, DialogActions, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, InputLabel } from '@mui/material';
 import axios from 'axios';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
@@ -147,23 +147,33 @@ function JobFactsAddJobs() {
 
     const [averageSalaries, setAverageSalaries] = useState([]);
 
-    const [minQuery, setMinQuery] = useState("");
-    const [minSalary, setMinSalary] = useState("");
+    const [aggQuery, setAggQuery] = useState();
+    const [aggResult, setAggResult] = useState("");
 
-    const handleMinQuery = (event) => {
-        setMinQuery(event.target.value);
-    }
+    const handleAggChange = (event) => {
+        setAggQuery(event.target.value);
+        console.log(event.target.value);
 
-    const handleMinSalary = () => {
-        axios.post("http://localhost:9000/api/Jobs/minSalary.php", JSON.stringify({
-            title: minQuery
+        axios.post("http://localhost:9000/api/Jobs/aggregation.php", JSON.stringify({
+            query: event.target.value
         }))
         .then((response) => {
-            setMinSalary(response.data.message);
+            setAggResult(response.data.message);
           }, (error) => {
             console.log(error);
           });
     }
+
+    // const handleMinSalary = () => {
+    //     axios.post("http://localhost:9000/api/Jobs/minSalary.php", JSON.stringify({
+    //         title: minQuery
+    //     }))
+    //     .then((response) => {
+    //         setMinSalary(response.data.message);
+    //       }, (error) => {
+    //         console.log(error);
+    //       });
+    // }
  
     useEffect(() => {
         let type = '';
@@ -266,12 +276,27 @@ function JobFactsAddJobs() {
                         :
                         <div> No companies have posted all job titles in this site </div>
                         }
-                        <DialogContentText sx={{mt: 5}}> Select the title you want to find minimum salary of (aggregation)  </DialogContentText>
-                        <div style={{position: "relative"}}>
+                        <DialogContentText sx={{mt: 5}}> Select the aggregation query on salary for all jobs posted in this website  </DialogContentText>
+                        {/* <div style={{position: "relative"}}>
                             <TextField fullWidth label="Type one of the job titles listed in our website" onChange={handleMinQuery} variant="filled" />
                             <Button onClick={handleMinSalary} style={{position: "absolute", right: 0, height: 60}}> Find </Button>
                             Min Salary: {minSalary ? "$" + minSalary[0][0][0] : ""}
-                        </div>
+                        </div> */}
+                        <FormControl sx={{mt: 1}} fullWidth>
+                            <InputLabel>Aggregation</InputLabel>
+                            <Select
+                                fullWidth
+                                sx={{mb: 1}}
+                                value={aggQuery}
+                                label="Aggregation"
+                                onChange={handleAggChange}
+                            >
+                                <MenuItem value={"MIN"}>Minimum</MenuItem>
+                                <MenuItem value={"MAX"}>Maximum</MenuItem>
+                                <MenuItem value={"AVG"}>Average</MenuItem>
+                            </Select>
+                            Aggregate Query Result: {aggResult ? "$" + aggResult[0][0][0] : ""}
+                        </FormControl>
                     </DialogContent>
                     <DialogActions>
                         <Button  onClick={handleCloseJobFact}>Close</Button>
