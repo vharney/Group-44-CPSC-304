@@ -4,11 +4,19 @@
 
     if (!empty($_POST)) {
         $content = json_decode(array_keys($_POST)[0], true);
-        $title=str_replace("_", " ", $content['title']);
+        $agg=$content['query'];
 
-        $query="SELECT MIN(DISTINCT salary)
-            FROM Jobs 
-            WHERE title='$title'";
+        if ($agg == 'MIN'){
+            $query="SELECT MIN(DISTINCT salary)
+            FROM Jobs";
+        } else if ($agg == 'MAX'){
+            $query="SELECT MAX(DISTINCT salary)
+            FROM Jobs";
+        } else if ($agg == 'AVG'){
+            $query="SELECT ROUND(AVG(DISTINCT salary))
+            FROM Jobs";
+        }
+        
 
         $result = mysqli_query($conn, $query);
 
