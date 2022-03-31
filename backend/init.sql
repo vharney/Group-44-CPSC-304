@@ -120,7 +120,7 @@ CREATE TABLE Applies (
 	status varchar(100),
 	PRIMARY KEY(username_comp, username_emp, title),
 	FOREIGN KEY(username_emp) REFERENCES Employees_Hire(username) ON DELETE CASCADE,
-	FOREIGN KEY(username_comp, title) REFERENCES Jobs(username, title) ON DELETE CASCADE
+	FOREIGN KEY(username_comp, title) REFERENCES Jobs(username, title) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Recommendations (
