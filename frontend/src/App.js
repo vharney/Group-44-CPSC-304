@@ -18,6 +18,7 @@ import UpdateFailed from './pages/UpdateFailed';
 import RegisterSuccess from './pages/RegisterSuccess';
 import RegisterFailed from './pages/RegisterFailed';
 import Groups from './pages/Groups';
+import Jobs from './pages/Jobs'
 
 function App() {
     return(
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/registerSuccess" component={RegisterSuccess} />
                 <Route path="/registerFailed" component={RegisterFailed} />
                 <Route path="/:username/groups" component={Groups} />
+                <Route path="/:username/jobs" component={Jobs} />
             </Switch>
         </Router>
     );
