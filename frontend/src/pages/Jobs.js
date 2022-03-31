@@ -92,14 +92,15 @@ function YourJobs() {
     const [yourJobs, setYourJobs] = useState([]);
 
     const handleJoinJob = (event) => {
-        console.log(event.target.username);
-        // console.log("testtttttttt");
+        let jobs_detail = JSON.parse(event.target.id);
+        console.log(jobs_detail)
+
         axios.post("http://localhost:9000/api/apply.php", JSON.stringify({
             // username: {username}.username,
             // groupID: event.target.id,
-            // username_comp: event.target.id.username,
+            username_comp: jobs_detail.username,
             username_emp: {username}.username,
-            title: event.target.id
+            title: jobs_detail.title
         }))
         .then((response) => {
             if (response.data.message === "error") {
@@ -158,7 +159,7 @@ function YourJobs() {
                                 salary($): {yourJob[0].salary}
                             </Typography>
                         </CardContent>
-                        <Button style={{position: "absolute", right: 10, bottom: 10}} onClick={handleJoinJob} id={yourJob[0].title + "*" + yourJob[0].username}>
+                        <Button style={{position: "absolute", right: 10, bottom: 10}} onClick={handleJoinJob} id={JSON.stringify(yourJob[0])}>
                             <MeetingRoomIcon />
                             Apply
                         </Button>
