@@ -58,6 +58,7 @@ function AvailableGroups() {
                 // Iterate pages to create pages tabs in AppBar
                 return <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
                     <Card variant="outlined" sx={{ maxWidth: 500 }} style={{borderRadius: "20px", position: "relative"}} >
+                        <img src={require("../assets/randomgroup" + (Math.floor(Math.random() * 5) + 1) + ".jpg")} style={{position: "absolute", width: 500, opacity: 0.6 }} />
                         <CardHeader
                             title={availableGroup[0].groupName}
                         />
@@ -114,6 +115,7 @@ function YourGroups() {
                 // Iterate pages to create pages tabs in AppBar
                 return <Box sx={{ display: 'flex', flexWrap: 'wrap', '& > :not(style)': { m: "auto", mt: 2, width: 500, height: "fitContent"}}} >
                     <Card variant="outlined" sx={{ maxWidth: 500 }} style={{borderRadius: "20px", position: "relative"}} >
+                        <img src={require("../assets/randomgroup" + (Math.floor(Math.random() * 5) + 1) + ".jpg")} style={{position: "absolute", width: 500, opacity: 0.6 }} />
                         <CardHeader
                             title={yourGroup[0].groupName}
                         />

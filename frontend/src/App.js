@@ -19,6 +19,7 @@ import RegisterSuccess from './pages/RegisterSuccess';
 import RegisterFailed from './pages/RegisterFailed';
 import Groups from './pages/Groups';
 import Jobs from './pages/Jobs'
+import Profile from './pages/Profile';
 
 function App() {
     return(
@@ -36,6 +37,7 @@ function App() {
                 <Route path="/registerFailed" component={RegisterFailed} />
                 <Route path="/:username/groups" component={Groups} />
                 <Route path="/:username/jobs" component={Jobs} />
+                <Route path="/:username/profile" component={Profile} />
             </Switch>
         </Router>
     );

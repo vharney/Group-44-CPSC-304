@@ -104,7 +104,7 @@ function NavBar({fullName}) {
                           }}
                         keepMounted open={Boolean(anchorElUser)} onClose={handleCloseUserMenu}
                     >
-                        <MenuItem> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
+                        <MenuItem onClick={() => {window.location = "/" + {username}.username + "/profile"}}> <AccountCircleIcon  fontSize="35px"/> &nbsp; Profile </MenuItem>
                         <MenuItem onClick={() => {window.location = "/" + {username}.username + "/settings"}}> <ManageAccountsIcon fontSize="35px"/> &nbsp;  Account Settings </MenuItem>
                         <Divider />
                         <MenuItem onClick={() => {window.location = "/"}}> <ListItemIcon> <LogoutIcon fontSize="small" /> </ListItemIcon> Logout </MenuItem>

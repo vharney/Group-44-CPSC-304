@@ -4,9 +4,9 @@
     if (!empty($_POST)) { 
         $content = json_decode(array_keys($_POST)[0], true);
         $username = $content["username"];
-        $new_username = $content["newUsername"];
+        $new_username = str_replace("_", " ", $content["newUsername"]);
         $password = $content["password"];
-        $fullname = $content["fullname"];
+        $fullname = str_replace("_", " ", $content["fullname"]);
         $phone = $content["phone"];
         $acode = $content["acode"];
 
