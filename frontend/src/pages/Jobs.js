@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Card, Chip, Paper, Button, CardHeader, DialogActions, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, TextField, InputLabel } from '@mui/material';
 import axios from 'axios';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 // function AvailableJobs() {
 //     const { username } = useParams();
@@ -145,6 +147,24 @@ function JobFactsAddJobs() {
 
     const [averageSalaries, setAverageSalaries] = useState([]);
 
+    const [minQuery, setMinQuery] = useState("");
+    const [minSalary, setMinSalary] = useState("");
+
+    const handleMinQuery = (event) => {
+        setMinQuery(event.target.value);
+    }
+
+    const handleMinSalary = () => {
+        axios.post("http://localhost:9000/api/Jobs/minSalary.php", JSON.stringify({
+            title: minQuery
+        }))
+        .then((response) => {
+            setMinSalary(response.data.message);
+          }, (error) => {
+            console.log(error);
+          });
+    }
+ 
     useEffect(() => {
         let type = '';
         axios.post("http://localhost:9000/api/userType.php", JSON.stringify({
@@ -203,8 +223,8 @@ function JobFactsAddJobs() {
         <div style={{position: "fixed", left: 0, top: 150}}>
             {userType=="COMPANIES" ? 
             <div>
-                <Box sx={{display: 'flex', flexWrap: 'wrap', '& > :not(style)': { width: 100, height: 100,},}}>
-                    <Paper onClick={handleOpenCreatePost} elevation={3}> + Add New Job Posting</Paper>
+                <Box sx={{display: 'flex', flexWrap: 'wrap', '& > :not(style)': { width: 100, height: 60,},}}>
+                    <Paper onClick={handleOpenCreatePost} elevation={3} style={{textAlign: "center", cursor: "pointer", paddingTop: "20px", paddingLeft: "10px", paddingRight: "5px"}}> + Add New Job Posting</Paper>
                 </Box>
                 <Dialog open={newPost} onClose={handleClose}>
                     <DialogTitle>Create a New Job Post</DialogTitle>
@@ -223,8 +243,8 @@ function JobFactsAddJobs() {
             :
             <div></div>    
             }
-            <Box sx={{display: 'flex', mt: 2, flexWrap: 'wrap', '& > :not(style)': { width: 100, height: 100,},}}>
-                <Paper onClick={handleOpenJobFact} elevation={3}> View Jobs Posted Facts</Paper>
+            <Box sx={{display: 'flex', mt: 2, flexWrap: 'wrap', '& > :not(style)': { width: 100, height: 60,},}}>
+                <Paper onClick={handleOpenJobFact} elevation={3} style={{textAlign: "center", backgroundColor: "black", color:"white", paddingTop: "20px", cursor:"pointer", paddingLeft: "10px", paddingRight: "5px"}}> View Jobs Posted Facts</Paper>
                 <Dialog open={jobFact} onClose={handleCloseJobFact}>
                     <DialogTitle>Some Interesting Job Facts</DialogTitle>
                     <DialogContent>
@@ -240,13 +260,18 @@ function JobFactsAddJobs() {
                         <DialogContentText sx={{mt: 5}}> Find the mean of salary of all jobs title posted in this website  </DialogContentText>
                         {averageSalaries.length > 0 ? averageSalaries.map((average) => {
                             return <div style={{marginLeft: "15px"}}>
-                                <Typography> {average[0].title} --> Salary average is ${average[0]["ROUND(AVG(DISTINCT salary))"]} </Typography>
+                                <Typography> {average[0].title} : Salary average is ${average[0]["ROUND(AVG(DISTINCT salary))"]} </Typography>
                             </div>
                         }) 
                         :
                         <div> No companies have posted all job titles in this site </div>
                         }
                         <DialogContentText sx={{mt: 5}}> Select the title you want to find minimum salary of (aggregation)  </DialogContentText>
+                        <div style={{position: "relative"}}>
+                            <TextField fullWidth label="Type one of the job titles listed in our website" onChange={handleMinQuery} variant="filled" />
+                            <Button onClick={handleMinSalary} style={{position: "absolute", right: 0, height: 60}}> Find </Button>
+                            Min Salary: {minSalary ? "$" + minSalary[0][0][0] : ""}
+                        </div>
                     </DialogContent>
                     <DialogActions>
                         <Button  onClick={handleCloseJobFact}>Close</Button>
@@ -370,11 +395,11 @@ function JobsPostedApplied() {
                                 </Typography>
                             </CardContent>
                             <Button style={{position: "absolute", left: 10, bottom: 10}} color="error" onClick={handleAcceptReject} id={JSON.stringify(employee[0])}>
-                                <MeetingRoomIcon />
+                                <ThumbDownAltIcon />
                                 Reject
                             </Button>
                             <Button style={{position: "absolute", right: 10, bottom: 10}} color="success" onClick={handleAcceptReject} id={JSON.stringify(employee[0])}>
-                                <MeetingRoomIcon />
+                                <DoneOutlineIcon />
                                 Accept
                             </Button>
                         </Card>

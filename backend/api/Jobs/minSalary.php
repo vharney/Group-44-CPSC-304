@@ -4,7 +4,7 @@
 
     if (!empty($_POST)) {
         $content = json_decode(array_keys($_POST)[0], true);
-        $title=$content['title'];
+        $title=str_replace("_", " ", $content['title']);
 
         $query="SELECT MIN(DISTINCT salary)
             FROM Jobs 
