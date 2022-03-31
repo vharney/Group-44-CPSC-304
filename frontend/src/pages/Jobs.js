@@ -141,6 +141,10 @@ function JobFactsAddJobs() {
           });
     }
 
+    const [activeCompanies, setActiveCompanies] = useState([]);
+
+    const [averageSalaries, setAverageSalaries] = useState([]);
+
     useEffect(() => {
         let type = '';
         axios.post("http://localhost:9000/api/userType.php", JSON.stringify({
@@ -155,6 +159,40 @@ function JobFactsAddJobs() {
                 // Else display home page accordingly
                 type = response.data.message;
                 setUserType(response.data.message);
+            }
+        }, (error) => {
+            console.log(error);
+        })
+
+        axios.post("http://localhost:9000/api/Jobs/division.php", JSON.stringify({
+            username: {username}.username,
+        }))
+        .then((response) => {
+            if (response.data.message === "error") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                // console.log(response);
+                setActiveCompanies(response.data.message);
+            }
+        }, (error) => {
+            console.log(error);
+        })
+
+        axios.post("http://localhost:9000/api/Jobs/nestedAgg.php", JSON.stringify({
+            username: {username}.username,
+        }))
+        .then((response) => {
+            if (response.data.message === "error") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                // console.log(response);
+                setAverageSalaries(response.data.message);
             }
         }, (error) => {
             console.log(error);
@@ -190,14 +228,28 @@ function JobFactsAddJobs() {
                 <Dialog open={jobFact} onClose={handleCloseJobFact}>
                     <DialogTitle>Some Interesting Job Facts</DialogTitle>
                     <DialogContent>
-                        <DialogContentText> Input the Job Title, Salary and Location </DialogContentText>
-                        <TextField id="outlined-basic" fullWidth label="Title" variant="outlined" onChange={handleJobTitle} sx={{mt: 2, mb: 2}} />
-                        <TextField fullWidth label="Salary" onChange={handleSalary} variant="filled" />
-                        <TextField fullWidth label="Location" onChange={handleLocation} variant="filled" />
+                        <DialogContentText> Most Active Companies (All companies who have posted job opening for all job titles) </DialogContentText>
+                        {activeCompanies.length > 0 ? activeCompanies.map((active) => {
+                            return <div style={{marginLeft: "15px"}}>
+                                <Typography> {active[0].username} </Typography>
+                            </div>
+                        }) 
+                        :
+                        <div> No companies have posted all job titles in this site </div>
+                        }
+                        <DialogContentText sx={{mt: 5}}> Find the mean of salary of all jobs title posted in this website  </DialogContentText>
+                        {averageSalaries.length > 0 ? averageSalaries.map((average) => {
+                            return <div style={{marginLeft: "15px"}}>
+                                <Typography> {average[0].title} --> Salary average is ${average[0]["ROUND(AVG(DISTINCT salary))"]} </Typography>
+                            </div>
+                        }) 
+                        :
+                        <div> No companies have posted all job titles in this site </div>
+                        }
+                        <DialogContentText sx={{mt: 5}}> Select the title you want to find minimum salary of (aggregation)  </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button color="error" onClick={handleClose}>Cancel</Button>
-                        <Button color="success" onClick={handleCreatePost}>Submit</Button>
+                        <Button  onClick={handleCloseJobFact}>Close</Button>
                     </DialogActions>    
                 </Dialog>
             </Box>
