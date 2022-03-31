@@ -270,7 +270,7 @@ function JobFactsAddJobs() {
                         <DialogContentText sx={{mt: 5}}> Find the mean of salary of all jobs title posted in this website  </DialogContentText>
                         {averageSalaries.length > 0 ? averageSalaries.map((average) => {
                             return <div style={{marginLeft: "15px"}}>
-                                <Typography> {average[0].title} : Salary average is ${average[0]["ROUND(AVG(DISTINCT salary))"]} </Typography>
+                                <Typography> {average[0].title}: Salary average is ${average[0]["ROUND(AVG(DISTINCT salary))"]} </Typography>
                             </div>
                         }) 
                         :
