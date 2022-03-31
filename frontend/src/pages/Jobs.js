@@ -117,6 +117,16 @@ function JobFactsAddJobs() {
         setLocation(event.target.value);
     }
 
+    const [jobFact, openJobFact] = useState(false);
+
+    const handleOpenJobFact = () => {
+        openJobFact(true);
+    }
+
+    const handleCloseJobFact = () => {
+        openJobFact(false);
+    }
+
     const handleCreatePost = () => {
         axios.post("http://localhost:9000/api/Jobs/insertJob.php", JSON.stringify({
             username: {username}.username,
@@ -176,7 +186,20 @@ function JobFactsAddJobs() {
             <div></div>    
             }
             <Box sx={{display: 'flex', mt: 2, flexWrap: 'wrap', '& > :not(style)': { width: 100, height: 100,},}}>
-                <Paper onClick={() => {console.log("hello")}} elevation={3}> View Jobs Posted Facts</Paper>
+                <Paper onClick={handleOpenJobFact} elevation={3}> View Jobs Posted Facts</Paper>
+                <Dialog open={jobFact} onClose={handleCloseJobFact}>
+                    <DialogTitle>Some Interesting Job Facts</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText> Input the Job Title, Salary and Location </DialogContentText>
+                        <TextField id="outlined-basic" fullWidth label="Title" variant="outlined" onChange={handleJobTitle} sx={{mt: 2, mb: 2}} />
+                        <TextField fullWidth label="Salary" onChange={handleSalary} variant="filled" />
+                        <TextField fullWidth label="Location" onChange={handleLocation} variant="filled" />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button color="error" onClick={handleClose}>Cancel</Button>
+                        <Button color="success" onClick={handleCreatePost}>Submit</Button>
+                    </DialogActions>    
+                </Dialog>
             </Box>
         </div>
     );
@@ -246,6 +269,31 @@ function JobsPostedApplied() {
         });
     }, []);
 
+    const handleAcceptReject = (event) => {
+        let jobs_detail = JSON.parse(event.target.id);
+        console.log(jobs_detail)
+
+        axios.post("http://localhost:9000/api/Jobs/handleAcceptReject.php", JSON.stringify({
+            // username: {username}.username,
+            // groupID: event.target.id,
+            username_comp: jobs_detail.username,
+            username_emp: jobs_detail.username_emp,
+            title: jobs_detail.title
+        }))
+        .then((response) => {
+            if (response.data.message === "error") {
+                // Go back to login page if there is any error
+                console.log(response);
+            }
+            else {
+                // Else display home page accordingly
+                window.location.reload(false);
+            }
+        }, (error) => {
+            console.log(error);
+        })
+    }
+
     return (
         <div style={{marginTop: 80, textAlign: "center"}}>
             {userType === "COMPANIES" ?
@@ -269,11 +317,11 @@ function JobsPostedApplied() {
                                     salary($): {employee[0].salary}
                                 </Typography>
                             </CardContent>
-                            <Button style={{position: "absolute", left: 10, bottom: 10}} color="error"  id={JSON.stringify(employee[0])}>
+                            <Button style={{position: "absolute", left: 10, bottom: 10}} color="error" onClick={handleAcceptReject} id={JSON.stringify(employee[0])}>
                                 <MeetingRoomIcon />
                                 Reject
                             </Button>
-                            <Button style={{position: "absolute", right: 10, bottom: 10}} color="success" id={JSON.stringify(employee[0])}>
+                            <Button style={{position: "absolute", right: 10, bottom: 10}} color="success" onClick={handleAcceptReject} id={JSON.stringify(employee[0])}>
                                 <MeetingRoomIcon />
                                 Accept
                             </Button>
