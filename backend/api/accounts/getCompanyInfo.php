@@ -3,7 +3,10 @@
 
     if (!empty($_POST)) {
         $content = json_decode(array_keys($_POST)[0], true);
-        $query="SELECT * FROM Users, Companies WHERE Users.username=Companies.username ";
+
+        $username = $content["username"];
+
+        $query="SELECT * FROM Users, Companies WHERE Users.username=Companies.username AND Users.username='$username'";
     
         $result = mysqli_query($conn, $query);
 
